@@ -1,0 +1,84 @@
+/*Crear Base de datos*/
+create database dbConferenceVG;
+
+/*usar Base de datos*/
+use dbConferenceVG;
+
+/*Crear la tabla PARTICIPANTE*/
+create table PARTICIPANTE
+(
+	IDPAR int auto_increment,
+	FECREGPAR date,
+    NOMPAR varchar(60),
+    APEPAR varchar(80),
+    DNIPAR char(8),
+    TIPPAR char(1),
+    CELPAR char(9),
+    EMAPAR varchar(90),
+    DIRPAR varchar(90),
+    ESTPAR char(1),
+    constraint IDPAR primary key(IDPAR)
+);
+/*Crear tabla PONENTE*/
+create table PONENTE
+(
+	CODPON char(5),
+	NOMPON varchar(60),
+	APEPON varchar(80),
+	CELPON char(9),
+	DNIPON char(8),
+	EMAPON varchar(90),
+	DIRPON varchar(90),
+    constraint CODPON primary key(CODPON)
+);
+
+/*Crear tabla CONFERENCIA*/
+create table CONFERENCIA
+(
+	CODCONF char(5),
+	TEMCONF varchar(90),
+	FECCONF date,
+	PONCONF char(5),
+    constraint CODCONF primary key(CODCONF)
+);
+
+/*Crear tabla REGISTRO*/
+create table REGISTRO
+(
+	CODREG char(5),
+	CODPAR  int,
+	FECREG date,
+	CERTREG char(1),
+    constraint CODREG primary key(CODREG)
+);
+
+/*Crear tabla REGISTRODETALLE*/
+create table REGISTRODETALLE
+(
+	IDREGDET int auto_increment,
+	CODREG char(5),
+	CODCONF char(5),
+	CANTPART int,
+    constraint IDREGDET primary key(IDREGDET)
+);
+
+/*Crear las relaciones entre tablas según el diagrama*/
+alter table REGISTRO
+	add constraint REGISTRO_PARTICIPANTE foreign key(CODPAR) references PARTICIPANTE(IDPAR);
+alter table REGISTRODETALLE
+	add constraint REGISTRODETALLE_REGISTRO foreign key(CODREG) references REGISTRO(CODREG);
+alter table REGISTRODETALLE
+	add constraint REGISTRODETALLE_CONFERENCIA foreign key(CODCONF) references CONFERENCIA(CODCONF);
+alter table CONFERENCIA
+	add constraint CONFERENCIA_PONENTE foreign key(PONCONF) references PONENTE(CODPON);
+
+/*Agregar los siguientes registros en la tabla PARTICIPANTE*/
+insert into PARTICIPANTE
+(NOMPAR, APEPAR, DNIPAR, TIPPAR, CELPAR, EMAPAR, DIRPAR, ESTPAR)
+values
+("Juan", "Campos Perez", "40255133", "1", "986512478", "juan.campos@vallegrande.edu.pe", "Av. Miraflores", "A"),
+("Sofia", "Solano Avila", "40255133", "1", "986512478", "juan.campos@vallegrande.edu.pe", "Av. Miraflores", "A"),
+("Juan", "Campos Perez", "40255133", "1", "986512478", "juan.campos@vallegrande.edu.pe", "Av. Miraflores", "A"),
+("Juan", "Campos Perez", "40255133", "2", "986512478", "juan.campos@vallegrande.edu.pe", "Av. Miraflores", "A");
+
+select * from PARTICIPANTE
